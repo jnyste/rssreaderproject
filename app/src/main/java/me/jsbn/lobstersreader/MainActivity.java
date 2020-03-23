@@ -5,18 +5,15 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.ListView;
-import com.prof.rssparser.Article;
-import com.prof.rssparser.Channel;
-import com.prof.rssparser.OnTaskCompleted;
-import com.prof.rssparser.Parser;
-
-import org.jetbrains.annotations.NotNull;
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
     SwipeRefreshLayout swipeRefreshLayout;
     ListView postsListView;
-    Parser rssParser;
+    ArrayList<RssParser.Item> postsList;
+    ArticleAdapter articleAdapter;
+    RssParser rssParser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,21 +23,30 @@ public class MainActivity extends AppCompatActivity {
 
         swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeRefresh);
         postsListView = (ListView) findViewById(R.id.postsListView);
-        rssParser = new Parser();
 
-        rssParser.onFinish(new OnTaskCompleted() {
+        postsList = new ArrayList<>();
+
+       articleAdapter = new ArticleAdapter(this, postsList);
+       postsListView.setAdapter(articleAdapter);
+
+        new Thread(new Runnable() {
             @Override
-            public void onTaskCompleted(@NotNull Channel channel) {
-                channel.getArticles();
-            }
+            public void run() {
+                RssParser.Item item = null;
 
-            @Override
-            public void onError(@NotNull Exception e) {
-                Log.d("me.jsbn.debug", e.toString());
-            }
-        });
+                rssParser = new RssParser(getString(R.string.rss_feed_url));
+                for (RssParser.Item i : rssParser.items) {
+                    postsList.add(i);
+                }
 
-        rssParser.execute(getString(R.string.rss_feed_url));
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        articleAdapter.notifyDataSetChanged();
+                    }
+                });
+            }
+        }).start();
 
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override

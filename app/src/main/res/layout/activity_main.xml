@@ -13,8 +13,8 @@
 
         <ListView
             android:id="@+id/postsListView"
-            style="@style/Widget.AppCompat.ListView"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:visibility="visible" />
     </android.support.v4.widget.SwipeRefreshLayout>
 </LinearLayout>
