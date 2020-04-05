@@ -11,9 +11,9 @@ public class MainActivity extends AppCompatActivity {
 
     SwipeRefreshLayout swipeRefreshLayout;
     ListView postsListView;
-    ArrayList<RssParser.Item> postsList;
+    ArrayList<LobstersPost> postsList;
     ArticleAdapter articleAdapter;
-    RssParser rssParser;
+    LobstersRssReader rssReader;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,18 +25,16 @@ public class MainActivity extends AppCompatActivity {
         postsListView = (ListView) findViewById(R.id.postsListView);
 
         postsList = new ArrayList<>();
-
-       articleAdapter = new ArticleAdapter(this, postsList);
-       postsListView.setAdapter(articleAdapter);
+        articleAdapter = new ArticleAdapter(this, postsList);
+        postsListView.setAdapter(articleAdapter);
 
         new Thread(new Runnable() {
             @Override
             public void run() {
-                RssParser.Item item = null;
 
-                rssParser = new RssParser(getString(R.string.rss_feed_url));
-                for (RssParser.Item i : rssParser.items) {
-                    postsList.add(i);
+                rssReader = new LobstersRssReader();
+                for (LobstersPost p : rssReader.getPosts("")) {
+                    postsList.add(p);
                 }
 
                 runOnUiThread(new Runnable() {
@@ -57,8 +55,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void updatePosts() {
-        Log.d("me.jsbn.debug", "updatePosts() called!");
-
         swipeRefreshLayout.setRefreshing(true);
 
         try {
@@ -66,9 +62,7 @@ public class MainActivity extends AppCompatActivity {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-
         swipeRefreshLayout.setRefreshing(false);
-
     }
 
 }

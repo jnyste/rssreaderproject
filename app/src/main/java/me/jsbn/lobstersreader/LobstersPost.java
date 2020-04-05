@@ -1,5 +1,6 @@
 package me.jsbn.lobstersreader;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class LobstersPost {
@@ -11,7 +12,7 @@ public class LobstersPost {
     String pubDate;
     String comments;
     String description;
-    List<String> categories;
+    List<String> categories = new ArrayList<>();
 
     public String getTitle() {
         return title;
