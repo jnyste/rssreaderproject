@@ -15,6 +15,8 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,7 +42,18 @@ public class ArticleAdapter extends ArrayAdapter<RssParser.Item> {
         ImageView userProfilePictureImageView = (ImageView) listItem.findViewById(R.id.userProfilePictureImageView);
         Picasso.get().load("https://lobste.rs/avatars/" + currentPost.author.substring(0, currentPost.author.indexOf("@")) + "-32.png").placeholder(R.drawable.ic_launcher_background).error(R.drawable.ic_launcher_foreground).into(userProfilePictureImageView);
 
-        String postLinkString = "<a href='" + currentPost.link + "'>" + currentPost.title + "</a>" + " (" + currentPost.link + ")";
+        URL currentPostUrl;
+        String baseUrl;
+
+        try {
+            currentPostUrl = new URL(currentPost.link);
+            baseUrl = currentPostUrl.getProtocol() + "://" + currentPostUrl.getHost();
+        } catch (MalformedURLException e) {
+            currentPostUrl = null;
+            baseUrl = "http://example.com";
+        }
+
+        String postLinkString = "<a href='" + currentPost.link + "'>" + currentPost.title + "</a>" + " (" + baseUrl + ")";
         TextView postTitleTextView = (TextView) listItem.findViewById(R.id.postTitleTextView);
         postTitleTextView.setText(Html.fromHtml(postLinkString));
         postTitleTextView.setMovementMethod(LinkMovementMethod.getInstance());
