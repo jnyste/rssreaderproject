@@ -30,7 +30,7 @@ public class MainActivity extends AppCompatActivity {
 
         if (getIntent().getExtras() != null) {
             fetchPosts(getIntent().getExtras().getString("me.jsbn.lobstersreader.CATEGORY"));
-            setTitle("Lobste.rs Reader - " + getIntent().getExtras().getString("me.jsbn.lobstersreader.CATEGORY"));
+            setTitle("Lobste.rs - " + getIntent().getExtras().getString("me.jsbn.lobstersreader.CATEGORY"));
         } else {
             fetchPosts("");
         }

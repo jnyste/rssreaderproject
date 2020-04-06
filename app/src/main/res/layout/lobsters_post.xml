@@ -66,12 +66,14 @@
 
     <TextView
         android:id="@+id/postCommentsTextView"
-        android:layout_width="wrap_content"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/postTagsLayout"
         android:layout_marginStart="20dp"
         android:layout_toRightOf="@id/postTimeTextView"
-        android:textSize="20sp"/>
+        android:textSize="20sp"
+        android:gravity="right"
+        android:paddingRight="40dp"/>
 
 
 </RelativeLayout>

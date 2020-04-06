@@ -1,4 +1,4 @@
 <resources>
-    <string name="app_name">Lobste.rs Reader</string>
+    <string name="app_name">Lobste.rs</string>
     <string name="rss_feed_url">https://lobste.rs/rss</string>
 </resources>

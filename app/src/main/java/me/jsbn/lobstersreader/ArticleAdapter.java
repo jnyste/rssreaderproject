@@ -3,6 +3,7 @@ package me.jsbn.lobstersreader;
 import android.content.Context;
 import android.content.Intent;
 import android.media.Image;
+import android.support.v4.content.ContextCompat;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
 import android.util.Log;
@@ -66,9 +67,13 @@ public class ArticleAdapter extends ArrayAdapter<LobstersPost> {
 
          for (String category : currentPost.getCategories()) {
             TextView categoryTextView = new TextView(categoriesLayout.getContext());
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+            params.setMargins(0, 10, 20, 10);
+            categoryTextView.setLayoutParams(params);
             categoryTextView.setText(category);
-            categoryTextView.setPadding(0, 20, 20, 20);
-            categoryTextView.setTextSize(18);
+            categoryTextView.setTextSize(14);
+            categoryTextView.setPadding(20, 10, 20, 10);
+            categoryTextView.setBackground(ContextCompat.getDrawable(context, R.drawable.back));
             categoryTextView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -83,7 +88,7 @@ public class ArticleAdapter extends ArrayAdapter<LobstersPost> {
         Log.d("me.jsbn.debug2", currentPost.getCategories().toString());
 
         TextView postAuthorTextView = (TextView) listItem.findViewById(R.id.postAuthorTextView);
-        postAuthorTextView.setText(currentPost.getAuthor().substring(0, currentPost.getAuthor().indexOf("@")));
+        postAuthorTextView.setText("  " + currentPost.getAuthor().substring(0, currentPost.getAuthor().indexOf("@")));
 
         TextView postCommentsTextView = (TextView) listItem.findViewById(R.id.postCommentsTextView);
         String commentsLinkString = "<a href='" + currentPost.getComments() + "'>Comments</a>";
