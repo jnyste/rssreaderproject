@@ -8,7 +8,7 @@
         android:id="@+id/postScoreTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@id/postTagsTextView"
+        android:layout_above="@id/postTagsLayout"
         android:layout_marginStart="5dp"
         android:layout_marginTop="20dp"
         android:layout_marginEnd="15dp"
@@ -23,25 +23,25 @@
         android:layout_marginTop="20dp"
         android:layout_marginEnd="20dp"
         android:layout_toRightOf="@id/postScoreTextView"
-        android:text="awfeafagfeag"
+        android:text="awfexafaqgfeag"
         android:textSize="20sp"
         android:textStyle="bold" />
 
-    <TextView
-        android:id="@+id/postTagsTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+    <LinearLayout
+        android:id="@+id/postTagsLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
         android:layout_below="@id/postTitleTextView"
-        android:layout_marginEnd="20dp"
-        android:layout_marginBottom="5dp"
-        android:layout_toRightOf="@id/postScoreTextView"
-        android:textSize="20sp" />
+        android:layout_toRightOf="@id/postScoreTextView">
+
+    </LinearLayout>
 
     <ImageView
         android:id="@+id/userProfilePictureImageView"
         android:layout_width="32dp"
         android:layout_height="32dp"
-        android:layout_below="@id/postTagsTextView"
+        android:layout_below="@id/postTagsLayout"
         android:layout_toRightOf="@id/postScoreTextView"
         android:visibility="visible"
         tools:srcCompat="@tools:sample/avatars[1]" />
@@ -50,7 +50,7 @@
         android:id="@+id/postAuthorTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/postTagsTextView"
+        android:layout_below="@id/postTagsLayout"
         android:layout_marginEnd="20dp"
         android:layout_marginBottom="20dp"
         android:layout_toRightOf="@id/userProfilePictureImageView"
@@ -60,7 +60,7 @@
         android:id="@+id/postTimeTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/postTagsTextView"
+        android:layout_below="@id/postTagsLayout"
         android:layout_toRightOf="@id/postAuthorTextView"
         android:textSize="20sp" />
 
@@ -68,7 +68,7 @@
         android:id="@+id/postCommentsTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/postTagsTextView"
+        android:layout_below="@id/postTagsLayout"
         android:layout_marginStart="20dp"
         android:layout_toRightOf="@id/postTimeTextView"
         android:textSize="20sp"/>

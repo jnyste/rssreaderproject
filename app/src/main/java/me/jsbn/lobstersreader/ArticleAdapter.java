@@ -1,6 +1,7 @@
 package me.jsbn.lobstersreader;
 
 import android.content.Context;
+import android.content.Intent;
 import android.media.Image;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
@@ -10,6 +11,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
@@ -39,6 +42,7 @@ public class ArticleAdapter extends ArrayAdapter<LobstersPost> {
 
         LobstersPost currentPost = postsList.get(position);
 
+
         ImageView userProfilePictureImageView = (ImageView) listItem.findViewById(R.id.userProfilePictureImageView);
         Picasso.get().load("https://lobste.rs/avatars/" + currentPost.getAuthor().substring(0, currentPost.getAuthor().indexOf("@")) + "-32.png").placeholder(R.drawable.ic_launcher_background).error(R.drawable.ic_launcher_foreground).into(userProfilePictureImageView);
         URL currentPostUrl;
@@ -56,9 +60,27 @@ public class ArticleAdapter extends ArrayAdapter<LobstersPost> {
         TextView postTitleTextView = (TextView) listItem.findViewById(R.id.postTitleTextView);
         postTitleTextView.setText(Html.fromHtml(postLinkString));
         postTitleTextView.setMovementMethod(LinkMovementMethod.getInstance());
+        LinearLayout categoriesLayout = listItem.findViewById(R.id.postTagsLayout);
 
-        TextView postTagsTextView = (TextView) listItem.findViewById(R.id.postTagsTextView);
-        postTagsTextView.setText(String.join(", ", currentPost.getCategories()));
+        categoriesLayout.removeAllViewsInLayout();
+
+         for (String category : currentPost.getCategories()) {
+            TextView categoryTextView = new TextView(categoriesLayout.getContext());
+            categoryTextView.setText(category);
+            categoryTextView.setPadding(0, 20, 20, 20);
+            categoryTextView.setTextSize(18);
+            categoryTextView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(getContext(), MainActivity.class);
+                    intent.putExtra("me.jsbn.lobstersreader.CATEGORY", category);
+                    getContext().startActivity(intent);
+                }
+            });
+            categoriesLayout.addView(categoryTextView);
+        }
+
+        Log.d("me.jsbn.debug2", currentPost.getCategories().toString());
 
         TextView postAuthorTextView = (TextView) listItem.findViewById(R.id.postAuthorTextView);
         postAuthorTextView.setText(currentPost.getAuthor().substring(0, currentPost.getAuthor().indexOf("@")));
@@ -70,4 +92,5 @@ public class ArticleAdapter extends ArrayAdapter<LobstersPost> {
 
         return listItem;
     }
+
 }

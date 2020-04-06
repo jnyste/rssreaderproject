@@ -28,12 +28,29 @@ public class MainActivity extends AppCompatActivity {
         articleAdapter = new ArticleAdapter(this, postsList);
         postsListView.setAdapter(articleAdapter);
 
+        if (getIntent().getExtras() != null) {
+            fetchPosts(getIntent().getExtras().getString("me.jsbn.lobstersreader.CATEGORY"));
+            setTitle("Lobste.rs Reader - " + getIntent().getExtras().getString("me.jsbn.lobstersreader.CATEGORY"));
+        } else {
+            fetchPosts("");
+        }
+
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                updatePosts();
+            }
+        });
+    }
+
+    public void fetchPosts(final String tag) {
+
         new Thread(new Runnable() {
             @Override
             public void run() {
 
                 rssReader = new LobstersRssReader();
-                for (LobstersPost p : rssReader.getPosts("")) {
+                for (LobstersPost p : rssReader.getPosts(tag)) {
                     postsList.add(p);
                 }
 
@@ -45,13 +62,6 @@ public class MainActivity extends AppCompatActivity {
                 });
             }
         }).start();
-
-        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                updatePosts();
-            }
-        });
     }
 
     public void updatePosts() {
