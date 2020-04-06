@@ -68,7 +68,7 @@ public class ArticleAdapter extends ArrayAdapter<LobstersPost> {
          for (String category : currentPost.getCategories()) {
             TextView categoryTextView = new TextView(categoriesLayout.getContext());
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-            params.setMargins(0, 10, 20, 10);
+            params.setMargins(0, 10, 20, 30);
             categoryTextView.setLayoutParams(params);
             categoryTextView.setText(category);
             categoryTextView.setTextSize(14);
