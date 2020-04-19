@@ -3,6 +3,9 @@ package me.jsbn.lobstersreader;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Class representing a post on Lobste.rs.
+ */
 public class LobstersPost {
 
     String title;

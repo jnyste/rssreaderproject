@@ -15,6 +15,11 @@ public class MainActivity extends AppCompatActivity {
     ArticleAdapter articleAdapter;
     LobstersRssReader rssReader;
 
+    /**
+     * Initialize the main activity and fetch posts, optionally given a tag whose posts to list.
+     * @param savedInstanceState
+     */
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -28,23 +33,22 @@ public class MainActivity extends AppCompatActivity {
         articleAdapter = new ArticleAdapter(this, postsList);
         postsListView.setAdapter(articleAdapter);
 
+        // If onCreate was called from tapping a tag in the UI, fetch posts for a given tag
         if (getIntent().getExtras() != null) {
             fetchPosts(getIntent().getExtras().getString("me.jsbn.lobstersreader.CATEGORY"));
             setTitle("Lobste.rs - " + getIntent().getExtras().getString("me.jsbn.lobstersreader.CATEGORY"));
         } else {
+            // Fetch all posts
             fetchPosts("");
         }
-
-        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                updatePosts();
-            }
-        });
     }
 
-    public void fetchPosts(final String tag) {
+    /**
+     * Create a new RSS reader instance and fetch the latest posts, and update the list adapter.
+     * @param tag The tag to search for
+     */
 
+    public void fetchPosts(final String tag) {
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -62,17 +66,6 @@ public class MainActivity extends AppCompatActivity {
                 });
             }
         }).start();
-    }
-
-    public void updatePosts() {
-        swipeRefreshLayout.setRefreshing(true);
-
-        try {
-            Thread.sleep(2000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        swipeRefreshLayout.setRefreshing(false);
     }
 
 }
