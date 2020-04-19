@@ -69,11 +69,21 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/postTagsLayout"
-        android:layout_marginStart="20dp"
+        android:layout_marginStart="0dp"
         android:layout_toRightOf="@id/postTimeTextView"
         android:textSize="20sp"
         android:gravity="right"
         android:paddingRight="40dp"/>
 
+    <TextView
+        android:id="@+id/bookmarkButton"
+        android:layout_width="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_height="wrap_content"
+        android:textSize="20sp"
+        android:text="Bookmark"
+        android:layout_marginRight="130dp"
+        android:layout_toLeftOf="@id/postCommentsTextView"
+        android:layout_below="@id/postTagsLayout"/>
 
 </RelativeLayout>

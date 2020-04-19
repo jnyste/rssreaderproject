@@ -1,21 +1,29 @@
 package me.jsbn.lobstersreader;
 
 import java.util.ArrayList;
-import java.util.List;
+
+import androidx.annotation.NonNull;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+import androidx.room.TypeConverters;
 
 /**
  * Class representing a post on Lobste.rs.
  */
+@Entity
+@TypeConverters({MyTypeConverters.class})
 public class LobstersPost {
 
+    @PrimaryKey
+    @NonNull
+    String guid;
     String title;
     String link;
-    String guid;
     String author;
     String pubDate;
     String comments;
     String description;
-    List<String> categories = new ArrayList<>();
+    ArrayList<String> categories = new ArrayList<>();
 
     public String getTitle() {
         return title;
@@ -73,11 +81,11 @@ public class LobstersPost {
         this.description = description;
     }
 
-    public List<String> getCategories() {
+    public ArrayList<String> getCategories() {
         return categories;
     }
 
-    public void setCategories(List<String> categories) {
+    public void setCategories(ArrayList<String> categories) {
         this.categories = categories;
     }
 }

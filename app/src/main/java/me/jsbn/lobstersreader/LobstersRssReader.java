@@ -67,6 +67,9 @@ public class LobstersRssReader {
                     else if (xmlTagName.equalsIgnoreCase("comments")) {
                         currentPost.setComments(textContent);
                     }
+                    else if (xmlTagName.equalsIgnoreCase("guid")) {
+                        currentPost.setGuid(textContent);
+                    }
                     else if (xmlTagName.equalsIgnoreCase("category")) {
                         currentPost.categories.add(textContent);
                     }

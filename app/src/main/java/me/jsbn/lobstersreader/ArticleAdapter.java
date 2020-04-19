@@ -2,10 +2,11 @@ package me.jsbn.lobstersreader;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.support.v4.content.ContextCompat;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,19 +15,26 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import com.squareup.picasso.Picasso;
+
+import org.w3c.dom.Text;
+
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
+import androidx.room.Room;
+
 /**
- * ArrayAdapter to display Lobste.rs posts.
+ * Custom ArrayAdapter to display Lobste.rs posts.
  */
 
 public class ArticleAdapter extends ArrayAdapter<LobstersPost> {
 
     private Context context;
     private List<LobstersPost> postsList = new ArrayList<>();
+    AppDatabase db;
+    private List<LobstersPost> savedPostsList = new ArrayList<>();
 
     /**
      * Initialize a new ArticleAdapter.
@@ -38,6 +46,8 @@ public class ArticleAdapter extends ArrayAdapter<LobstersPost> {
         super(_context, 0, articleList);
         context = _context;
         postsList = articleList;
+        db = Room.databaseBuilder(getContext(), AppDatabase.class, "bookmarkedPosts").allowMainThreadQueries().build();
+        savedPostsList = db.lobstersPostDao().getAll();
     }
 
     /**
@@ -107,12 +117,38 @@ public class ArticleAdapter extends ArrayAdapter<LobstersPost> {
         // Set the author TextView
         TextView postAuthorTextView = (TextView) listItem.findViewById(R.id.postAuthorTextView);
         postAuthorTextView.setText("  " + currentPost.getAuthor().substring(0, currentPost.getAuthor().indexOf("@")));
+        postAuthorTextView.setTextSize(14);
 
         // Set the comments link TextView
         TextView postCommentsTextView = (TextView) listItem.findViewById(R.id.postCommentsTextView);
         String commentsLinkString = "<a href='" + currentPost.getComments() + "'>Comments</a>";
         postCommentsTextView.setText(Html.fromHtml(commentsLinkString));
         postCommentsTextView.setMovementMethod(LinkMovementMethod.getInstance());
+        postCommentsTextView.setTextSize(16);
+
+        // Make the bookmark button clickable and set its text depending on if the post has been saved or not
+        TextView bookmarkButtonTextView = (TextView) listItem.findViewById(R.id.bookmarkButton);
+        bookmarkButtonTextView.setTextSize(16);
+        bookmarkButtonTextView.setPaintFlags(bookmarkButtonTextView.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+        for (LobstersPost post : savedPostsList) {
+            if (post.getGuid().equals(currentPost.getGuid())) {
+                bookmarkButtonTextView.setText("Unbookmark");
+            }
+        }
+
+        bookmarkButtonTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (bookmarkButtonTextView.getText().equals("Bookmark")) {
+                    bookmarkButtonTextView.setText("Unbookmark");
+                    db.lobstersPostDao().insertAll(currentPost);
+                } else {
+                    bookmarkButtonTextView.setText("Bookmark");
+                    db.lobstersPostDao().deleteByGuid(currentPost.getGuid());
+                }
+                savedPostsList = db.lobstersPostDao().getAll();
+            }
+        });
 
         return listItem;
     }
