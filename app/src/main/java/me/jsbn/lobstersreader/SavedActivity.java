@@ -11,6 +11,9 @@ import java.util.List;
 
 import androidx.room.Room;
 
+/**
+ * Activity representing the Bookmarks view.
+ */
 public class SavedActivity extends AppCompatActivity {
 
     ListView postsListView;
@@ -19,14 +22,18 @@ public class SavedActivity extends AppCompatActivity {
     ArticleAdapter articleAdapter;
     ArrayList<LobstersPost> savedPosts;
 
+    /**
+     * Create the activity and load the user's bookmarks.
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        db = Room.databaseBuilder(getApplicationContext(), AppDatabase.class, "bookmarkedPosts").allowMainThreadQueries().build();
-        savedPosts = (ArrayList<LobstersPost>) db.lobstersPostDao().getAll();
+        db = Room.databaseBuilder(getApplicationContext(), AppDatabase.class, "lobstersPosts").allowMainThreadQueries().build();
+        savedPosts = (ArrayList<LobstersPost>) db.lobstersPostDao().getAllBookmarked();
 
         postsListView = (ListView) findViewById(R.id.postsListView);
         postsList = new ArrayList<>();

@@ -2,7 +2,6 @@ package me.jsbn.lobstersreader;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.support.v4.content.ContextCompat;
 import android.text.Html;
@@ -14,10 +13,9 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import com.squareup.picasso.Picasso;
-
-import org.w3c.dom.Text;
-
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -46,8 +44,8 @@ public class ArticleAdapter extends ArrayAdapter<LobstersPost> {
         super(_context, 0, articleList);
         context = _context;
         postsList = articleList;
-        db = Room.databaseBuilder(getContext(), AppDatabase.class, "bookmarkedPosts").allowMainThreadQueries().build();
-        savedPostsList = db.lobstersPostDao().getAll();
+        db = Room.databaseBuilder(getContext(), AppDatabase.class, "lobstersPosts").allowMainThreadQueries().build();
+        savedPostsList = db.lobstersPostDao().getAllBookmarked();
     }
 
     /**
@@ -106,6 +104,7 @@ public class ArticleAdapter extends ArrayAdapter<LobstersPost> {
             categoryTextView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    // Start a new MainActivity with the tag in extras.
                     Intent intent = new Intent(getContext(), MainActivity.class);
                     intent.putExtra("me.jsbn.lobstersreader.CATEGORY", category);
                     getContext().startActivity(intent);
@@ -136,18 +135,27 @@ public class ArticleAdapter extends ArrayAdapter<LobstersPost> {
             }
         }
 
-        bookmarkButtonTextView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (bookmarkButtonTextView.getText().equals("Bookmark")) {
-                    bookmarkButtonTextView.setText("Unbookmark");
-                    db.lobstersPostDao().insertAll(currentPost);
-                } else {
-                    bookmarkButtonTextView.setText("Bookmark");
-                    db.lobstersPostDao().deleteByGuid(currentPost.getGuid());
-                }
-                savedPostsList = db.lobstersPostDao().getAll();
+        // Bookmark functionality
+        bookmarkButtonTextView.setOnClickListener(v -> {
+            if (bookmarkButtonTextView.getText().equals("Bookmark")) {
+                bookmarkButtonTextView.setText("Unbookmark");
+                currentPost.setPostState(1); // 1 = Bookmarked
+                db.lobstersPostDao().insertAll(currentPost);
+            } else {
+                bookmarkButtonTextView.setText("Bookmark");
+                db.lobstersPostDao().deleteByGuid(currentPost.getGuid());
             }
+            savedPostsList = db.lobstersPostDao().getAllBookmarked();
+        });
+
+        // Hide button functionality
+        ImageView hideButtonImageView = listItem.findViewById(R.id.imageView);
+        hideButtonImageView.setOnClickListener(v -> {
+            currentPost.setPostState(2); // 2 = Hidden
+            db.lobstersPostDao().insertAll(currentPost);
+            postsList.remove(currentPost);
+            this.notifyDataSetChanged();
+            Toast.makeText(getContext(), "Post hidden.", Toast.LENGTH_SHORT).show();
         });
 
         return listItem;

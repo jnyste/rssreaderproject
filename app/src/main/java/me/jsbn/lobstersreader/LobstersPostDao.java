@@ -8,6 +8,9 @@ import androidx.room.Insert;
 import androidx.room.Query;
 
 @Dao
+/**
+ * DAO representing database queries for Lobste.rs posts.
+ */
 public interface LobstersPostDao {
     @Query("SELECT * FROM LobstersPost")
     List<LobstersPost> getAll();
@@ -20,4 +23,11 @@ public interface LobstersPostDao {
 
     @Query("DELETE FROM LobstersPost WHERE guid = :guid")
     abstract void deleteByGuid(String guid);
+
+    @Query("SELECT * FROM LobstersPost WHERE postState = 1")
+    abstract List<LobstersPost> getAllBookmarked();
+
+    @Query("SELECT * FROM LobstersPost WHERE postState = 2")
+    abstract List<LobstersPost> getAllHidden();
+
 }

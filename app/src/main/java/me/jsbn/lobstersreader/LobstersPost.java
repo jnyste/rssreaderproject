@@ -1,8 +1,8 @@
 package me.jsbn.lobstersreader;
 
 import java.util.ArrayList;
-
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 import androidx.room.TypeConverters;
@@ -23,6 +23,8 @@ public class LobstersPost {
     String pubDate;
     String comments;
     String description;
+    int postState = 0; // 0 = Normal, 1 = Bookmarked, 2 = Hidden
+
     ArrayList<String> categories = new ArrayList<>();
 
     public String getTitle() {
@@ -87,5 +89,21 @@ public class LobstersPost {
 
     public void setCategories(ArrayList<String> categories) {
         this.categories = categories;
+    }
+
+    public int getPostState() { return postState; }
+
+    public void setPostState(int postState) { this.postState = postState; }
+
+    /**
+     * Two Lobste.rs posts are equal when their GUIDs match.
+     * @param obj The post to compare with.
+     * @return true if equal, false if not equal.
+     */
+    @Override
+    public boolean equals(@Nullable Object obj) {
+        if (!(obj instanceof LobstersPost))
+            return false;
+        return this.getGuid().equals(((LobstersPost) obj).getGuid());
     }
 }

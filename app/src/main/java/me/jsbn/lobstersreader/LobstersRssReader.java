@@ -7,6 +7,10 @@ import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
 
+/**
+ * Class to parse Lobste.rs RSS data.
+ */
+
 public class LobstersRssReader {
 
     XmlPullParser xmlParser;
@@ -15,6 +19,11 @@ public class LobstersRssReader {
         xmlParser = Xml.newPullParser();
     }
 
+    /**
+     * Get all posts for the given tag. Get every post on the front page if no tag is specified.
+     * @param tag The tag whose posts to search for.
+     * @return An ArrayList of Lobste.rs posts.
+     */
     public ArrayList<LobstersPost> getPosts(String tag) {
 
         InputStream data;
@@ -87,6 +96,11 @@ public class LobstersRssReader {
 
     }
 
+    /**
+     * Helper method to get an InputStream from an URL.
+     * @param feedUrl The URL to fetch an InputStream from.
+     * @return HTTP response as InputStream.
+     */
     public InputStream getFeedFromUrl(String feedUrl) {
         try {
             URL url = new URL(feedUrl);

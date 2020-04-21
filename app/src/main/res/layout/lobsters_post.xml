@@ -86,4 +86,13 @@
         android:layout_toLeftOf="@id/postCommentsTextView"
         android:layout_below="@id/postTagsLayout"/>
 
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:paddingTop="10dp"
+        android:paddingRight="10dp"
+        app:srcCompat="@drawable/hide"
+        android:layout_alignParentRight="true"/>
+
 </RelativeLayout>
