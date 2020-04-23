@@ -33,7 +33,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         postsListView = (ListView) findViewById(R.id.postsListView);
-
         postsList = new ArrayList<>();
         articleAdapter = new ArticleAdapter(this, postsList);
         postsListView.setAdapter(articleAdapter);

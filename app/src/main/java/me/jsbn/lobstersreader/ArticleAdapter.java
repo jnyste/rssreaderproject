@@ -14,7 +14,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.squareup.picasso.Picasso;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -26,13 +25,12 @@ import androidx.room.Room;
 /**
  * Custom ArrayAdapter to display Lobste.rs posts.
  */
-
 public class ArticleAdapter extends ArrayAdapter<LobstersPost> {
 
     private Context context;
     private List<LobstersPost> postsList = new ArrayList<>();
-    AppDatabase db;
     private List<LobstersPost> savedPostsList = new ArrayList<>();
+    AppDatabase db;
 
     /**
      * Initialize a new ArticleAdapter.
@@ -143,6 +141,7 @@ public class ArticleAdapter extends ArrayAdapter<LobstersPost> {
                 db.lobstersPostDao().insertAll(currentPost);
             } else {
                 bookmarkButtonTextView.setText("Bookmark");
+                currentPost.setPostState(0);
                 db.lobstersPostDao().deleteByGuid(currentPost.getGuid());
             }
             savedPostsList = db.lobstersPostDao().getAllBookmarked();
@@ -151,11 +150,15 @@ public class ArticleAdapter extends ArrayAdapter<LobstersPost> {
         // Hide button functionality
         ImageView hideButtonImageView = listItem.findViewById(R.id.imageView);
         hideButtonImageView.setOnClickListener(v -> {
-            currentPost.setPostState(2); // 2 = Hidden
-            db.lobstersPostDao().insertAll(currentPost);
-            postsList.remove(currentPost);
-            this.notifyDataSetChanged();
-            Toast.makeText(getContext(), "Post hidden.", Toast.LENGTH_SHORT).show();
+            if (currentPost.getPostState() == 1) {
+                Toast.makeText(getContext(), "Can't hide a bookmarked post.", Toast.LENGTH_SHORT).show();
+            } else {
+                currentPost.setPostState(2); // 2 = Hidden
+                db.lobstersPostDao().insertAll(currentPost);
+                postsList.remove(currentPost);
+                this.notifyDataSetChanged();
+                Toast.makeText(getContext(), "Post hidden.", Toast.LENGTH_SHORT).show();
+            }
         });
 
         return listItem;
